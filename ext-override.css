@@ -1,0 +1,32 @@
+ 
+#ct {
+    margin:10px;
+    font-family:Verdana, Arial, sans-serif;
+    font-size:13px;
+}
+.userChatTabLink {
+    display:block;
+    padding:3px;
+    text-decoration:none;
+}
+.userChatTabLink:hover {
+    text-decoration:none;
+    background: turqoise;
+}
+.link-panel .x-panel-body {
+    padding:4px;
+}
+
+.newMessageArrived {
+	background-color: turquoise;
+}
+
+.userAvailable {
+	color : green;
+}
+.userBusy {
+	color : red;
+}
+.userAway {
+	color : yellow;
+}
