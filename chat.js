@@ -39,7 +39,30 @@ Chat.Util = {
     updateChatVisibility : function(userId) {
         var $textareaCmp = Ext.getCmp('textarea::' + userId).getEl();
         $textareaCmp.dom.scrollTop = 99999;
-    }
+    },
+
+    setTabTitleColor : function( userIdForTab, newColor ) {
+        var tabId = "tab::"+userIdForTab;
+        tabPanel  = chatWindow.items.itemAt(1);
+        console.log("tabPanel:")
+        console.dir(tabPanel);
+        var tabNo = 0;
+        // TODO buggy find() funtion
+        tabPanel.items.find(function(tab) {
+            if(tab.id === tabId) {
+                return tabNo;
+            } else {
+                tabNo++;
+            }
+        });
+        console.log("tabNo" + tabNo);
+        // make sure we have a number and tab exists
+        if( tabNo>=0 && !Ext.isEmpty( tabPanel.getTabEl(tabNo))) {
+            var t = tabPanel.getTabEl(tabNo);
+            var tt = Ext.getDom(t);
+            tt.getElementsByClassName("x-tab-strip-text")[0].style.backgroundColor = newColor;
+        }
+     }
 
 };
 
@@ -217,13 +240,13 @@ Ext.onReady(function() {
     Ext.QuickTips.init();
 
     // create and show window
-    var win = new Chat.Window({
+    chatWindow = new Chat.Window({
         width: 600,
         height: 400,
         closable: false,
         title: Ext.fly('page-title').dom.innerHTML
     });
-    win.show();
+    chatWindow.show();
 
 });
 // eo function onReady
