@@ -189,7 +189,7 @@ Chat.Window = Ext.extend(Ext.Window, {
                         text: 'submit',
                         handler: function(btn) {
                             var userId = btn.id.substring(btn.id.indexOf("::") + 2, btn.id.length);
-                            sendMessage(userId);
+                            Chat.Util.sendMessage(userId);
                         }
                     }]
                     }]
