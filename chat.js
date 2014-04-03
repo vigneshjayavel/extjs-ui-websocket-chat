@@ -1,37 +1,48 @@
 Ext.ns('Chat');
 
-function getUserLinkForId(userId) {
-    var selector = "tab::" + userId;
-    console.log(selector);
-    return Ext.get(selector);
-}
+Chat.Util = {
 
-function notifyNewMessage(userIdForTab) {
-    // console.log("notifyNewMessage");
-    var userTab = getUserLinkForId(userIdForTab);
-    console.dir(userTab);
-    userTab.setStyle('color', 'red');
-    // TODO
-    // create text color animation style class
-    // add the class to the item.
-}
+    getUserLinkForId : function(userId) {
+        var selector = "tab::" + userId;
+        console.log(selector);
+        return Ext.get(selector);
+    },
 
-function readMessages(userIdForTab) {
-    // console.log("readMessages");
-    var userTab = getUserLinkForId(userIdForTab);
-    console.dir(userTab);
-    userTab.setStyle('color', 'blue');
-}
+    notifyNewMessage : function(userIdForTab) {
+        // console.log("notifyNewMessage");
+        var userTab = this.getUserLinkForId(userIdForTab);
+        console.dir(userTab);
+        userTab.setStyle('color', 'red');
+        // TODO
+        // create text color animation style class
+        // add the class to the item.
+    },
 
-function sendMessage(userId) {
-    console.log("Msg sent to " + userId);
-    var $textareaCmp = Ext.getCmp('textarea::' + userId);
-    var $textfieldCmp = Ext.getCmp("textfield::" + userId);
-    var currentText = $textareaCmp.getValue();
-    var updatedText = ((currentText.length === 0) ? currentText: currentText + "\n") + $textfieldCmp.getValue();
-    $textareaCmp.setValue(updatedText);
-    $textfieldCmp.reset();
-}
+    readMessages : function(userIdForTab) {
+        // console.log("readMessages");
+        var userTab = this.getUserLinkForId(userIdForTab);
+        console.dir(userTab);
+        userTab.setStyle('color', 'blue');
+    },
+
+    sendMessage : function(userId) {
+        console.log("Msg sent to " + userId);
+        var $textareaCmp = Ext.getCmp('textarea::' + userId);
+        var $textfieldCmp = Ext.getCmp("textfield::" + userId);
+        var currentText = $textareaCmp.getValue();
+        var updatedText = ((currentText.length === 0) ? currentText: currentText + "\n") + $textfieldCmp.getValue();
+        $textareaCmp.setValue(updatedText);
+        this.updateChatVisibility(userId);
+        $textfieldCmp.reset();
+    },
+
+    updateChatVisibility : function(userId) {
+        var $textareaCmp = Ext.getCmp('textarea::' + userId).getEl();
+        $textareaCmp.dom.scrollTop = 99999;
+    }
+
+};
+
 
 // {{{
 Chat.LinksPanel = Ext.extend(Ext.Panel, {
@@ -63,10 +74,8 @@ Chat.LinksPanel = Ext.extend(Ext.Panel, {
         class:'userAway'
     }],
     layout: 'fit',
-    tpl: new Ext.XTemplate('<tpl for="links"><a class="userChatTabLink {class}" id="{userId}" href="#">{text}</a></tpl>')
-
+    tpl: new Ext.XTemplate('<tpl for="links"><a class="userChatTabLink {class}" id="{userId}" href="#">{text}</a></tpl>'),
     // {{{
-    ,
     afterRender: function() {
         console.log("LinksPanel is rendered..");
         // call parent (MANDATORY)
@@ -158,20 +167,24 @@ Chat.Window = Ext.extend(Ext.Window, {
                         xtype: 'textarea',
                         id: "textarea::" + userId,
                         readOnly: true,
+                        width: "100%",
+                        height: "70%",
                         emptyText: 'Your conversation with : ' + title
                     }, {
                         xtype: 'textfield',
+                        width: "100%",
                         id: "textfield::" + userId,
                         emptyText: 'Type here to chat with :' + title,
                         listeners: {
                             specialkey: function(f, e) {
                                 if (e.getKey() == e.ENTER) {
-                                    sendMessage(userId);
+                                    Chat.Util.sendMessage(userId);
                                 }
                             }
                         }
                     }, {
                         xtype: 'button',
+                        width: "20%",
                         id: "submitButton::" + userId,
                         text: 'submit',
                         handler: function(btn) {
@@ -187,7 +200,7 @@ Chat.Window = Ext.extend(Ext.Window, {
         this.tabPanel.setActiveTab(tab);
         // TODO
         // if the tab is the currently focused tab, dont do readMessages()
-        // readMessages(userId);
+        // Chat.Util.readMessages(userId);
     }
     // eo function onLinkClick
     // }}}
