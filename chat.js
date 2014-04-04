@@ -10,19 +10,18 @@ Chat.Util = {
 
     notifyNewMessage : function(userIdForTab) {
         // console.log("notifyNewMessage");
-        var userTab = this.getUserLinkForId(userIdForTab);
-        console.dir(userTab);
-        userTab.setStyle('color', 'red');
-        // TODO
-        // create text color animation style class
-        // add the class to the item.
+        if(!this.isTabActive(userIdForTab)) {
+            var newColor = "red";
+            this.setTabTitleColor(userIdForTab,newColor);
+        }
     },
 
     readMessages : function(userIdForTab) {
         // console.log("readMessages");
-        var userTab = this.getUserLinkForId(userIdForTab);
-        console.dir(userTab);
-        userTab.setStyle('color', 'blue');
+        if(this.isTabActive(userIdForTab)) {
+            var newColor = "";
+            this.setTabTitleColor(userIdForTab,newColor);
+        }
     },
 
     sendMessage : function(userId) {
