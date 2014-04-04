@@ -30,3 +30,23 @@
 .userAway {
 	color : yellow;
 }
+
+.newChatInitiation {
+    animation: doTextColorAnime 2s;
+    -moz-animation: doTextColorAnime 2s infinite; /* Firefox */
+    -webkit-animation: doTextColorAnime 2s infinite; /* Safari and Chrome */
+}
+
+@-moz-keyframes doTextColorAnime /* Firefox */
+{
+    0%   {background-color:red;}
+    50%  {background-color:green;}
+    100%   {background-color:red;}
+}
+
+@-webkit-keyframes doTextColorAnime /* Safari and Chrome */
+{
+    0%   {background-color:red;}
+    50%  {background-color:green;}
+    100%   {background-color:red;}
+}

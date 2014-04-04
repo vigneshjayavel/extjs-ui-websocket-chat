@@ -2,10 +2,15 @@ Ext.ns('Chat');
 
 Chat.Util = {
 
-    getUserLinkForId : function(userId) {
+    getUserTabCmpForId : function(userId) {
         var selector = "tab::" + userId;
         console.log(selector);
         return Ext.get(selector);
+    },
+
+    getUserLinkCmpForId : function(userId) {
+        var selector = "a.userChatTabLink#"+userId;
+        return Ext.select(selector);
     },
 
     notifyNewMessage : function(userIdForTab) {
@@ -65,6 +70,11 @@ Chat.Util = {
             console.log("cannot get active element when no tabs are open!");
         }
         return (tabId === activeTabId);
+    },
+
+    initiateNewChatNotification : function(userId) {
+        var $userLinkCmp = this.getUserLinkCmpForId(userId);
+        $userLinkCmp.addClass("newChatInitiation");
     }
 
 };
@@ -174,8 +184,11 @@ Chat.Window = Ext.extend(Ext.Window, {
     // {{{
     ,
     onLinkClick: function(e, t) {
+        // remove newChatInitiation class from the link if it is applied already
+        Ext.get(t).removeClass("newChatInitiation");
         var title = t.innerHTML;
         var userId = t.id;
+        
         // console.log("userId:"+userId);
         var tab = this.tabPanel.items.find(function(i) {
             return i.title === title;
