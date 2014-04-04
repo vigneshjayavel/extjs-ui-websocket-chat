@@ -44,25 +44,29 @@ Chat.Util = {
     setTabTitleColor : function( userIdForTab, newColor ) {
         var tabId = "tab::"+userIdForTab;
         tabPanel  = chatWindow.items.itemAt(1);
-        console.log("tabPanel:")
-        console.dir(tabPanel);
-        var tabNo = 0;
-        // TODO buggy find() funtion
-        tabPanel.items.find(function(tab) {
-            if(tab.id === tabId) {
-                return tabNo;
-            } else {
-                tabNo++;
-            }
-        });
-        console.log("tabNo" + tabNo);
+        var tabNo, count = 0;
+        tabNo = tabPanel.items.findIndex('id',tabId);
         // make sure we have a number and tab exists
         if( tabNo>=0 && !Ext.isEmpty( tabPanel.getTabEl(tabNo))) {
             var t = tabPanel.getTabEl(tabNo);
             var tt = Ext.getDom(t);
             tt.getElementsByClassName("x-tab-strip-text")[0].style.backgroundColor = newColor;
+        } else {
+            console.log("cannot modify a tab that is not open!!");
         }
-     }
+    },
+
+    isTabActive : function(userIdForTab) {
+        var tabId = "tab::"+userIdForTab;
+        var tabPanel  = chatWindow.items.itemAt(1);
+        var activeTabId ;
+        try {
+            activeTabId = tabPanel.getActiveTab().getId();
+        } catch (e) {
+            console.log("cannot get active element when no tabs are open!");
+        }
+        return (tabId === activeTabId);
+    }
 
 };
 
@@ -82,22 +86,22 @@ Chat.LinksPanel = Ext.extend(Ext.Panel, {
         //manual prop
         text: 'Vignesh',
         userId: 'vignesh',
-        class:'userAvailble'
+        chatStatus:'userAvailable'
     }, {
         text: 'Ashiq',
         userId: "ashiq",
-        class:'userBusy'
+        chatStatus:'userBusy'
     }, {
         text: 'Hari Priya',
         userId: "haripriya",
-        class:'userAvailble'
+        chatStatus:'userAvailable'
     }, {
         text: 'Prabhakar',
         userId: "prabhakar",
-        class:'userAway'
+        chatStatus:'userAway'
     }],
     layout: 'fit',
-    tpl: new Ext.XTemplate('<tpl for="links"><a class="userChatTabLink {class}" id="{userId}" href="#">{text}</a></tpl>'),
+    tpl: new Ext.XTemplate('<tpl for="links"><a class="userChatTabLink {chatStatus}" id="{userId}" href="#">{text}</a></tpl>'),
     // {{{
     afterRender: function() {
         console.log("LinksPanel is rendered..");
