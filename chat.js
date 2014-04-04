@@ -12,15 +12,16 @@ Chat.Util = {
         // console.log("notifyNewMessage");
         if(!this.isTabActive(userIdForTab)) {
             var newColor = "red";
-            this.setTabTitleColor(userIdForTab,newColor);
+            this.setTabTitleColor("tab::"+userIdForTab,newColor);
         }
     },
 
-    readMessages : function(userIdForTab) {
-        // console.log("readMessages");
-        if(this.isTabActive(userIdForTab)) {
+    readMessages : function(tabId) {
+        console.log("readMessages for "+tabId);
+        if(this.isTabActive(tabId)) {
+            console.log(tabId + " is active");
             var newColor = "";
-            this.setTabTitleColor(userIdForTab,newColor);
+            this.setTabTitleColor(tabId,newColor);
         }
     },
 
@@ -40,8 +41,7 @@ Chat.Util = {
         $textareaCmp.dom.scrollTop = 99999;
     },
 
-    setTabTitleColor : function( userIdForTab, newColor ) {
-        var tabId = "tab::"+userIdForTab;
+    setTabTitleColor : function( tabId, newColor ) {
         tabPanel  = chatWindow.items.itemAt(1);
         var tabNo, count = 0;
         tabNo = tabPanel.items.findIndex('id',tabId);
@@ -52,11 +52,11 @@ Chat.Util = {
             tt.getElementsByClassName("x-tab-strip-text")[0].style.backgroundColor = newColor;
         } else {
             console.log("cannot modify a tab that is not open!!");
+            console.debug(tabId + "," + tabNo)
         }
     },
 
-    isTabActive : function(userIdForTab) {
-        var tabId = "tab::"+userIdForTab;
+    isTabActive : function(tabId) {
         var tabPanel  = chatWindow.items.itemAt(1);
         var activeTabId ;
         try {
@@ -144,7 +144,7 @@ Chat.Window = Ext.extend(Ext.Window, {
                 region: 'center',
                 border: false,
                 activeItem: 0,
-                items: []
+                items: [],
                 }]
             };
 
@@ -186,6 +186,17 @@ Chat.Window = Ext.extend(Ext.Window, {
                 id: "tab::"+userId,
                 layout: 'fit',
                 closable: true,
+                listeners : {
+                    render : function() {
+                        // console.log("added listener to tab "+this.id);
+                        var tabId = this.getEl().id;
+                        var cmp = Ext.getCmp(tabId);
+                        cmp.onShow = function(){ 
+                            console.log(tabId + "is shown")
+                            Chat.Util.readMessages(tabId);
+                        };
+                    }
+                },
                 items: [{
                     xtype: 'panel',
                     id: 'panel::' + userId,
