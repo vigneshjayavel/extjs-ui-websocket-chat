@@ -206,7 +206,7 @@ Chat.Window = Ext.extend(Ext.Window, {
                         var cmp = Ext.getCmp(tabId);
                         cmp.onShow = function(){ 
                             console.log(tabId + "is shown")
-                            Chat.Util.readMessages(tabId);
+                            chatUtil.readMessages(tabId);
                         };
                     }
                 },
@@ -228,7 +228,7 @@ Chat.Window = Ext.extend(Ext.Window, {
                         listeners: {
                             specialkey: function(f, e) {
                                 if (e.getKey() == e.ENTER) {
-                                    Chat.Util.sendMessage(userId);
+                                    chatUtil.sendMessage(userId);
                                 }
                             }
                         }
@@ -239,7 +239,7 @@ Chat.Window = Ext.extend(Ext.Window, {
                         text: 'submit',
                         handler: function(btn) {
                             var userId = btn.id.substring(btn.id.indexOf("::") + 2, btn.id.length);
-                            Chat.Util.sendMessage(userId);
+                            chatUtil.sendMessage(userId);
                         }
                     }]
                     }]
@@ -250,7 +250,7 @@ Chat.Window = Ext.extend(Ext.Window, {
         this.tabPanel.setActiveTab(tab);
         // TODO
         // if the tab is the currently focused tab, dont do readMessages()
-        // Chat.Util.readMessages(userId);
+        // chatUtil.readMessages(userId);
     }
     // eo function onLinkClick
     // }}}
@@ -266,6 +266,7 @@ Ext.onReady(function() {
 
     Ext.QuickTips.init();
 
+    chatUtil = Object.create(Chat.Util);
     // create and show window
     chatWindow = new Chat.Window({
         width: 600,
