@@ -78,6 +78,14 @@ Chat.Util = {
     initiateNewChatNotification : function(userId) {
         var $userLinkCmp = this.getUserLinkCmpForId(userId);
         $userLinkCmp.addClass("newChatInitiation");
+    },
+
+    addIncomingMessageToChat : function(userId, newMessage) {
+        var $textareaCmp = Ext.getCmp('textarea::' + userId);
+        var currentText = $textareaCmp.getValue();
+        var updatedText = ((currentText.length === 0) ? currentText: currentText + "\n") + newMessage;
+        $textareaCmp.setValue(updatedText);
+        this.updateChatVisibility(userId);
     }
 
 };
