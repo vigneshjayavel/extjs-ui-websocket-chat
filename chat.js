@@ -15,7 +15,8 @@ Chat.Util = {
 
     notifyNewMessage : function(userIdForTab) {
         // console.log("notifyNewMessage");
-        if(!this.isTabActive(userIdForTab)) {
+        var tabId = "tab::"+userIdForTab;
+        if(!this.isTabActive(tabId)) {
             var newColor = "red";
             this.setTabTitleColor("tab::"+userIdForTab,newColor);
         }
@@ -66,6 +67,8 @@ Chat.Util = {
         var activeTabId ;
         try {
             activeTabId = tabPanel.getActiveTab().getId();
+            console.log("activeTabId:"+activeTabId);
+            console.log("current tabId:"+tabId);
         } catch (e) {
             console.log("cannot get active element when no tabs are open!");
         }
@@ -154,7 +157,7 @@ Chat.Window = Ext.extend(Ext.Window, {
                 region: 'center',
                 border: false,
                 activeItem: 0,
-                items: [],
+                items: []
                 }]
             };
 
@@ -201,13 +204,13 @@ Chat.Window = Ext.extend(Ext.Window, {
                 closable: true,
                 listeners : {
                     render : function() {
-                        // console.log("added listener to tab "+this.id);
+                        console.log("added listener to tab "+this.id);
                         var tabId = this.getEl().id;
-                        var cmp = Ext.getCmp(tabId);
-                        cmp.onShow = function(){ 
-                            console.log(tabId + "is shown")
+                        cmp = Ext.getCmp(tabId);
+                        cmp.on("show",function(){ 
+                            console.log(tabId + "is shown");
                             chatUtil.readMessages(tabId);
-                        };
+                        });
                     }
                 },
                 items: [{
