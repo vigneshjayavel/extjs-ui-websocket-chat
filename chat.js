@@ -150,15 +150,21 @@ Chat.ChatStatusCombo = Ext.extend(Ext.form.ComboBox, {
     store: new Ext.data.ArrayStore({
         id: 0,
         fields: [
-            'myId',
-            'displayText'
+            'chatStatusCode',
+            'chatStatus'
         ],
-        data: [[1, 'item1'], [2, 'item2']]
+        data: [["userAvailable", 'Available'], ["userBusy", 'Busy'], ["userAway", 'Away']]
     }),
-    valueField: 'myId',
-    displayField: 'displayText',
+    valueField: 'chatStatusCode',
+    displayField: 'chatStatus',
     listeners: {
-        
+        select: function(combo, record, index) {
+          console.log(combo.getValue());
+        }
+    },
+    initComponent: function(){
+        // console.log("initComponent of chatstatuscombo");
+        this.setValue("userAvailable");
     }
 });
 // register xtype
