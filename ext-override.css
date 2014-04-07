@@ -17,6 +17,10 @@
     padding:4px;
 }
 
+ .link-panel {
+    margin-top: 4%;
+ }
+
 .newMessageArrived {
 	background-color: turquoise;
 }

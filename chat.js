@@ -141,6 +141,29 @@ Chat.LinksPanel = Ext.extend(Ext.Panel, {
 // register xtype
 Ext.reg('linkspanel', Chat.LinksPanel);
 // }}}
+
+Chat.ChatStatusCombo = Ext.extend(Ext.form.ComboBox, {
+    typeAhead: true,
+    triggerAction: 'all',
+    lazyRender:true,
+    mode: 'local',
+    store: new Ext.data.ArrayStore({
+        id: 0,
+        fields: [
+            'myId',
+            'displayText'
+        ],
+        data: [[1, 'item1'], [2, 'item2']]
+    }),
+    valueField: 'myId',
+    displayField: 'displayText',
+    listeners: {
+        
+    }
+});
+// register xtype
+Ext.reg('chatstatuscombo', Chat.ChatStatusCombo);
+
 // {{{
 Chat.Window = Ext.extend(Ext.Window, {
 
@@ -155,12 +178,16 @@ Chat.Window = Ext.extend(Ext.Window, {
         // hard coded config - cannot be changed from outside
         var config = {
             items: [{
+                xtype: 'chatstatuscombo',
+                region: 'west',
+                width:150
+            },{
                 xtype: 'linkspanel',
                 region: 'west',
                 width: 150,
                 collapsible: false,
                 split: true
-            }, {
+            },{
                 xtype: 'tabpanel',
                 region: 'center',
                 border: false,
@@ -175,8 +202,8 @@ Chat.Window = Ext.extend(Ext.Window, {
         // call parent
         Chat.Window.superclass.initComponent.apply(this, arguments);
 
-        this.linksPanel = this.items.itemAt(0);
-        this.tabPanel = this.items.itemAt(1);
+        this.linksPanel = this.items.itemAt(1);
+        this.tabPanel = this.items.itemAt(2);
 
         this.linksPanel.on({
             scope: this,
